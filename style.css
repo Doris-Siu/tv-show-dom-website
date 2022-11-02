@@ -1,3 +1,28 @@
 #root {
   color: red;
 }
+
+.card {
+  /* width: 25%;
+  height: 200px; */
+
+  text-align: center;
+}
+
+.title {
+  color: black;
+  font-size: 25px;
+  border: solid 1px;
+  padding: 0.5em;
+  border-radius: 10px;
+}
+
+.card p {
+  color: grey;
+}
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  padding: 50px;
+  grid-gap: 2.5em;
+}
