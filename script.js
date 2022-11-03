@@ -7,15 +7,34 @@ function setup() {
 function makePageForEpisodes(episodeList) {
   const rootElem = document.getElementById("root");
 
+  //search bar and result
   const searchBar = document.createElement("input");
+  searchBar.id = "txtSearchBy";
   searchBar.addEventListener("input", function () {
-    drawEpiCard(episodeList, searchBar.value.toLowerCase());
+    drawEpiCard(episodeList);
   });
   const searchResult = document.createElement("label");
   searchResult.id = "searchResult";
   searchBar.setAttribute("type", "string");
 
+  const selectMenu = document.createElement("select");
+  selectMenu.id = "selName";
+  const optionPlaceHolderEl = document.createElement("option");
+  optionPlaceHolderEl.innerText = "--Please Select--";
+  selectMenu.appendChild(optionPlaceHolderEl);
+  episodeList.forEach((episode) => {
+    const optionEl = document.createElement("option");
+    optionEl.innerText = `S${formatVal(episode.season)}E${formatVal(
+      episode.number
+    )} - ${episode.name}`;
+    selectMenu.addEventListener("change", function () {
+      drawEpiCard(episodeList);
+    });
+    selectMenu.appendChild(optionEl);
+  });
+
   rootElem.innerHTML = `Got ${episodeList.length} episode(s). The data has (originally) come from <a href= "https://www.tvmaze.com/">TVMaze.com</a><br>`;
+  rootElem.appendChild(selectMenu);
   rootElem.appendChild(searchBar);
   rootElem.appendChild(searchResult);
   drawEpiCard(episodeList);
@@ -25,18 +44,34 @@ function clearCards() {
     .querySelectorAll("#root .grid-container")
     .forEach((el) => el.remove());
 }
-function drawEpiCard(episodeList, searchBy) {
+function drawEpiCard(episodeList) {
   clearCards();
+  //get search words
+  const searchBar = document.getElementById("txtSearchBy");
+  let searchBy = searchBar.value.toLowerCase();
+
+  //root
   const rootElem = document.getElementById("root");
 
+  //selected option
+  const selectMenu = document.getElementById("selName");
+  let selectedName = selectMenu.value;
+
+  //create container
   const container = document.createElement("div");
   container.className = "grid-container";
+
   let found = 0;
   episodeList.forEach((episode) => {
+    // if (optionEl && optionEl.innerText.includes(episode.name)){
+    //   container.appendChild(getEpiCard(episode));
+    // }
     if (
-      !searchBy ||
-      episode.summary.toLowerCase().includes(searchBy) ||
-      episode.name.toLowerCase().includes(searchBy)
+      (selectedName == "--Please Select--" ||
+        selectedName.includes(episode.name)) &&
+      (!searchBy ||
+        episode.summary.toLowerCase().includes(searchBy) ||
+        episode.name.toLowerCase().includes(searchBy))
     ) {
       found++;
       container.appendChild(getEpiCard(episode));
