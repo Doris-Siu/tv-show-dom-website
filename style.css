@@ -3,8 +3,8 @@
 }
 
 .card {
-  /* width: 25%;
-  height: 200px; */
+  /* width: 25%; */
+  /* height: 200px; */
 
   text-align: center;
 }
@@ -20,9 +20,10 @@
 .card p {
   color: grey;
 }
+
 .grid-container {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: 1fr 1fr 1fr;
   padding: 50px;
   grid-gap: 2.5em;
 }
