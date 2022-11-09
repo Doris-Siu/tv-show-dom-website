@@ -1,6 +1,14 @@
+let _localEpisodes = [];
+async function getAllEpisodes() {
+  if (_localEpisodes.length == 0) {
+    const response = await fetch("https://api.tvmaze.com/shows/82/episodes");
+    _localEpisodes = response.json();
+  }
+  return _localEpisodes;
+}
 //You can edit ALL of the code here
-function setup() {
-  const allEpisodes = getAllEpisodes();
+async function setup() {
+  const allEpisodes = await getAllEpisodes();
   makePageForEpisodes(allEpisodes);
 }
 
@@ -18,11 +26,11 @@ function makePageForEpisodes(episodeList) {
   //search result
   const searchResult = document.createElement("label");
   searchResult.id = "searchResult";
-  
+
   // select/ddl
   const selectMenu = document.createElement("select");
   selectMenu.id = "selName";
-  
+
   //add placeholder to ddl
   const optionPlaceHolderEl = document.createElement("option");
   optionPlaceHolderEl.innerText = "--Please Select--";
@@ -37,12 +45,11 @@ function makePageForEpisodes(episodeList) {
 
     selectMenu.appendChild(optionEl);
   });
-  
+
   //onchange event of ddl
   selectMenu.addEventListener("change", function () {
-      drawEpiCard(episodeList);
+    drawEpiCard(episodeList);
   });
-  
 
   rootElem.innerHTML = `Got ${episodeList.length} episode(s). The data has (originally) come from <a href= "https://www.tvmaze.com/">TVMaze.com</a><br>`;
   rootElem.appendChild(selectMenu);
@@ -76,22 +83,15 @@ function drawEpiCard(episodeList) {
 
   let found = 0;
   episodeList.forEach((episode) => {
-
     if (
       //ddl filter
-        (
-          selectedName === "--Please Select--" 
-          || selectedName.includes(episode.name)
-        ) 
-      &&
+      (selectedName === "--Please Select--" ||
+        selectedName.includes(episode.name)) &&
       //search bar filter
-        (
-          !searchBy 
-          || episode.summary.toLowerCase().includes(searchBy) 
-          || episode.name.toLowerCase().includes(searchBy)
-        )
-    ) 
-    {
+      (!searchBy ||
+        episode.summary.toLowerCase().includes(searchBy) ||
+        episode.name.toLowerCase().includes(searchBy))
+    ) {
       found++;
       container.appendChild(getEpiCard(episode));
     }
