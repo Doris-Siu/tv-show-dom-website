@@ -16,7 +16,13 @@
   padding: 0.5em;
   border-radius: 10px;
 }
-
+.show-title {
+  color: black;
+  font-size: 25px;
+  padding: 0.5em;
+  border-radius: 10px;
+  padding: 20px 50px 0px 50px;
+}
 .card p {
   color: grey;
 }
@@ -26,4 +32,23 @@
   grid-template-columns: 1fr 1fr 1fr;
   padding: 50px;
   grid-gap: 2.5em;
+}
+.show-grid-container {
+  display: grid;
+  grid-template-columns: 1fr 5fr 2fr;
+  padding: 0px 50px 20px 50px;
+  grid-gap: 2.5em;
+}
+.list-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 10px;
+  grid-gap: 2.5em;
+}
+.show-card {
+  border: solid 0.5px lightgray;
+  box-shadow: 5px 5px 5px lightgrey;
+}
+.show-title {
+  cursor: pointer;
 }

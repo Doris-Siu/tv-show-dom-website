@@ -2,13 +2,7 @@ let _localEpisodes = [];
 let _localShows = [];
 let _showDDLCtrlId = "selShow";
 let _epDDLCtrlId = "selName";
-function sortByName(arr) {
-  return arr.sort(function (a, b) {
-    var textA = a.name.toLowerCase();
-    var textB = b.name.toLowerCase();
-    return textA < textB ? -1 : textA > textB ? 1 : 0;
-  });
-}
+
 async function getAllShowAsync() {
   if (_localShows.length == 0) {
     _localShows = sortByName(getAllShows());
@@ -47,9 +41,8 @@ async function getAllEpisodesAsync(showId) {
   return true;
 }
 //You can edit ALL of the code here
-async function setup() {
+async function episodeSetup() {
   createSearchResult();
-  createShowMenu();
   createEPMenu();
   createSearchBar();
   let allshowsResult = await getAllShowAsync();
@@ -62,6 +55,8 @@ async function setup() {
   }
 }
 async function refreshEpisodesDDL(showId) {
+  //do nothing when not showing episodes page
+  if (document.getElementById("root").style.display === "none") return;
   await getAllEpisodesAsync(showId);
   const selectMenu = document.getElementById(_epDDLCtrlId);
   selectMenu.innerHTML = "";
@@ -80,35 +75,13 @@ async function refreshEpisodesDDL(showId) {
   });
   drawEpiCard();
 }
-function refreshShowMenu() {
-  const selectShow = document.getElementById(_showDDLCtrlId);
-  selectShow.innerHTML = "";
-  //add options to ddl(select show)
-  _localShows.forEach((show) => {
-    const showEl = document.createElement("option");
-    showEl.innerText = show.name;
-    showEl.value = show.id;
-    selectShow.appendChild(showEl);
-  });
-}
 function createSearchResult() {
   const rootElem = document.getElementById("root");
   const resultP = document.createElement("p");
   resultP.innerHTML = `Got ${_localEpisodes.length} episode(s). The data has (originally) come from <a href= "https://www.tvmaze.com/">TVMaze.com</a><br>`;
   rootElem.appendChild(resultP);
 }
-function createShowMenu() {
-  const rootElem = document.getElementById("root");
 
-  // select/ddl (select show)
-  const selectShow = document.createElement("select");
-  selectShow.id = _showDDLCtrlId;
-  selectShow.addEventListener("change", function () {
-    refreshEpisodesDDL(selectShow.value);
-  });
-
-  rootElem.appendChild(selectShow);
-}
 function createEPMenu() {
   const rootElem = document.getElementById("root");
   const selectMenu = document.createElement("select");
@@ -133,14 +106,15 @@ function createSearchBar() {
   const searchResult = document.createElement("label");
   searchResult.id = "searchResult";
 
-  // const resultP = document.createElement("p");
-  // resultP.innerHTML = `Got ${_localEpisodes.length} episode(s). The data has (originally) come from <a href= "https://www.tvmaze.com/">TVMaze.com</a><br>`;
-  // //rootElem.innerHTML = `Got ${_localEpisodes.length} episode(s). The data has (originally) come from <a href= "https://www.tvmaze.com/">TVMaze.com</a><br>`;
+  const goBackEl = document.createElement("button");
+  goBackEl.innerHTML = "Back to show list";
+  goBackEl.addEventListener("click", function () {
+    toggleDisplay();
+  });
 
-  // rootElem.insertBefore(resultP, rootElem.firstChild);
   rootElem.appendChild(searchBar);
   rootElem.appendChild(searchResult);
-  //drawEpiCard();
+  rootElem.appendChild(goBackEl);
 }
 function clearCards() {
   document
@@ -157,7 +131,7 @@ function drawEpiCard() {
   const rootElem = document.getElementById("root");
 
   //selected option
-  const selectMenu = document.getElementById("selName");
+  const selectMenu = document.getElementById(_epDDLCtrlId);
   let selectedName = selectMenu.value;
 
   //create container
@@ -176,7 +150,8 @@ function drawEpiCard() {
         episode.name.toLowerCase().includes(searchBy))
     ) {
       found++;
-      container.appendChild(getEpiCard(episode));
+      let epicCard = getEpiCard(episode);
+      if (epicCard) container.appendChild(epicCard);
     }
   });
   rootElem.appendChild(container);
@@ -187,10 +162,8 @@ function drawEpiCard() {
     searchResult.innerText = "";
   }
 }
-function formatVal(val) {
-  return val.toString().padStart(2, "0");
-}
 function getEpiCard(episode) {
+  if (!episode) return null;
   const divEl = document.createElement("div");
   const titleEl = document.createElement("h1");
   const imgEl = document.createElement("img");
@@ -202,9 +175,42 @@ function getEpiCard(episode) {
   titleEl.innerText = `${episode.name} - S${formatVal(
     episode.season
   )}E${formatVal(episode.number)}`;
-  imgEl.src = episode.image.medium;
+  if (episode.image) imgEl.src = episode.image.medium;
   divEl.innerHTML += episode.summary;
   return divEl;
 }
+//level500
+function toggleDisplay(showId) {
+  const rootEl = document.getElementById("root");
+  const showListEl = document.getElementById("show-listing");
+  if (rootEl.style.display === "block" || rootEl.style.display === "") {
+    rootEl.style.display = "none";
+    showListEl.style.display = "block";
+  } else if (rootEl.style.display === "none") {
+    rootEl.style.display = "block";
+    showListEl.style.display = "none";
+    if (showId) {
+      const showMenuElem = document.getElementById(_showDDLCtrlId);
+      showMenuElem.value = showId;
+      showMenuElem.dispatchEvent(new Event("change"));
+    }
+  }
+}
 
-window.onload = setup();
+window.onload = () => {
+  toggleDisplay();
+  episodeSetup();
+  showListSetup();
+};
+
+//common function
+function formatVal(val) {
+  return val.toString().padStart(2, "0");
+}
+function sortByName(arr) {
+  return arr.sort(function (a, b) {
+    var textA = a.name.toLowerCase();
+    var textB = b.name.toLowerCase();
+    return textA < textB ? -1 : textA > textB ? 1 : 0;
+  });
+}
