@@ -78,23 +78,39 @@ async function refreshEpisodesDDL(showId) {
 function createSearchResult() {
   const rootElem = document.getElementById("root");
   const resultP = document.createElement("p");
-  resultP.innerHTML = `Got ${_localEpisodes.length} episode(s). The data has (originally) come from <a href= "https://www.tvmaze.com/">TVMaze.com</a><br>`;
+  resultP.innerHTML = `The data has (originally) come from <a href= "https://www.tvmaze.com/">TVMaze.com</a><br>`;
+  // resultP.innerHTML = `Got ${_localEpisodes.length} episode(s). The data has (originally) come from <a href= "https://www.tvmaze.com/">TVMaze.com</a><br>`;
   rootElem.appendChild(resultP);
 }
 
 function createEPMenu() {
   const rootElem = document.getElementById("root");
+
+  const menuLabel = document.createElement("p");
+  menuLabel.innerHTML = "Select a particular episode:";
+
+  const nextLine = document.createElement("br");
+
   const selectMenu = document.createElement("select");
   selectMenu.id = _epDDLCtrlId;
   selectMenu.addEventListener("change", function () {
     drawEpiCard();
   });
+
+  rootElem.appendChild(menuLabel);
   rootElem.appendChild(selectMenu);
+  rootElem.appendChild(nextLine);
 }
+
 function createSearchBar() {
   const rootElem = document.getElementById("root");
 
   //search bar
+  const menuLabel = document.createElement("p");
+  menuLabel.innerHTML = "Search by keyword(s):";
+
+  const nextLine = document.createElement("br");
+
   const searchBar = document.createElement("input");
   searchBar.id = "txtSearchBy";
   searchBar.setAttribute("type", "string");
@@ -107,15 +123,19 @@ function createSearchBar() {
   searchResult.id = "searchResult";
 
   const goBackEl = document.createElement("button");
-  goBackEl.innerHTML = "Back to show list";
+  goBackEl.className="btn";
+  goBackEl.innerHTML = "Back to shows list";
   goBackEl.addEventListener("click", function () {
     toggleDisplay();
   });
 
+  rootElem.appendChild(menuLabel);
   rootElem.appendChild(searchBar);
   rootElem.appendChild(searchResult);
+  rootElem.appendChild(nextLine);
   rootElem.appendChild(goBackEl);
 }
+
 function clearCards() {
   document
     .querySelectorAll("#root div.grid-container")

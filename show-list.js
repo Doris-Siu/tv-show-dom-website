@@ -1,8 +1,8 @@
 //level 500
 
 function showListSetup() {
-  createFilterBar();
   createShowMenu();
+  createFilterBar();
   drawShowCard();
 }
 
@@ -34,6 +34,8 @@ function refreshShowMenu(filterBarValue) {
 function createFilterBar() {
   const showListEl = document.getElementById("show-listing");
 
+  const searchBarLabel = document.createElement("p");
+  searchBarLabel.innerHTML = "Search a TV show by keyword(s):";
   //filter bar
   const filterBar = document.createElement("input");
   filterBar.id = "txtFilterBy";
@@ -47,6 +49,7 @@ function createFilterBar() {
   const filterResult = document.createElement("label");
   filterResult.id = "filterResult";
 
+  showListEl.appendChild(searchBarLabel);
   showListEl.appendChild(filterBar);
   showListEl.appendChild(filterResult);
 }
@@ -60,6 +63,9 @@ function clearShows() {
 function createShowMenu() {
   const showlistingElem = document.getElementById("show-listing");
 
+  const selectLabel = document.createElement("p");
+  selectLabel.innerHTML = "Select a TV show:";
+
   // select/ddl (select show)
   const selectShow = document.createElement("select");
   selectShow.id = _showDDLCtrlId;
@@ -68,6 +74,7 @@ function createShowMenu() {
     drawShowCard();
   });
 
+  showlistingElem.appendChild(selectLabel);
   showlistingElem.appendChild(selectShow);
 }
 

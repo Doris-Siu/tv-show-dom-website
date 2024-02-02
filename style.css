@@ -1,12 +1,23 @@
 #root {
-  color: red;
+  color: black;
+}
+
+body{
+  background-color: #FF7F7F;
+}
+
+.btn{
+  margin-top: 2rem;
+  padding:5px;
 }
 
 .card {
   /* width: 25%; */
   /* height: 200px; */
-
   text-align: center;
+  background-color: white;
+  border: solid 0.5px lightgray;
+  box-shadow: 5px 5px 5px  lightgrey;
 }
 
 .title {
@@ -39,13 +50,16 @@
   padding: 0px 50px 20px 50px;
   grid-gap: 2.5em;
 }
+
 .list-container {
   display: grid;
   grid-template-columns: 1fr;
   padding: 10px;
   grid-gap: 2.5em;
 }
+
 .show-card {
+  background-color: white;
   border: solid 0.5px lightgray;
   box-shadow: 5px 5px 5px lightgrey;
 }
