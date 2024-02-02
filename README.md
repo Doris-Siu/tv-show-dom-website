@@ -1,6 +1,6 @@
 # TV Show DOM Website
 
-This is a TV show website using DOM where visitors can browse all TV shows, select and search functionalities are included where they can select and filter on one particular show and its related episodes. The data has (originally) come from TVMaze.com API.
+This is a TV show website using DOM where visitors can browse all TV shows. Select and search functionalities are included where they can pick and filter on one particular show and its related episodes. The data has (originally) come from TVMaze.com API.
 
 ![tv-shows](https://github.com/Doris-Siu/tv-slide-show-website/assets/107772913/50637836-07e3-45af-90b8-5031a1a74f69)
 
